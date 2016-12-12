@@ -190,33 +190,25 @@ namespace Profile.BL.Providers
 
         public void DeleteNewUsers(int[] userIds)
         {
-            Logger.Debug("Execute DeleteNewUsers method");
-            try
+
+            var users = _context.Users.Where(u => userIds.Contains(u.Id)).ToList();
+
+            if (users.Any(u => u.Roles.Count != 0))
             {
-                var users = _context.Users.Where(u => userIds.Contains(u.Id)).ToList();
-
-                if (users.Any(u => u.Roles.Count != 0))
-                {
-                    throw new Exception("Operation failed. Target users can not have roles");
-                }
-
-                foreach (var user in users)
-                {
-                    _context.Entry(user).State = EntityState.Deleted;
-
-                    if (user.Contacts != null)
-                    {
-                        _context.Entry(user.Contacts).State = EntityState.Deleted;
-                    }
-                }
-
-                _context.SaveChanges();
+                throw new Exception("Operation failed. Target users can not have roles");
             }
-            catch(Exception e)
+
+            foreach (var user in users)
             {
-                Logger.Debug(e.Message);
-                throw e;
+                _context.Entry(user).State = EntityState.Deleted;
+
+                if (user.Contacts != null)
+                {
+                    _context.Entry(user.Contacts).State = EntityState.Deleted;
+                }
             }
+
+            _context.SaveChanges();
         }
 
         public List<User> GetNewUsers()
