@@ -12,7 +12,6 @@ using Profile.BL.Interfaces;
 using Profile.DAL.Context;
 using Profile.DAL.Entities;
 using Profile.DAL.Identity;
-using Profile.DAL.Identity.Entities;
 
 namespace Profile.BL.Providers
 {
@@ -187,6 +186,28 @@ namespace Profile.BL.Providers
         public string GetDefaultAvatarUrl()
         {
             return DefaultAvatarUrl;
+        }
+
+        public void DeleteNewUsers(int[] userIds)
+        {
+            var users = _context.Users.Where(u => userIds.Contains(u.Id)).ToList();
+
+            if (users.Any(u => u.Roles.Count != 0))
+            {
+                throw new Exception("Operation failed. Target users can not have roles");
+            }
+
+            foreach (var user in users)
+            {
+                _context.Entry(user).State = EntityState.Deleted;
+
+                if (user.Contacts != null)
+                {
+                    _context.Entry(user.Contacts).State = EntityState.Deleted;
+                }
+            }
+
+            _context.SaveChanges();
         }
 
         public List<User> GetNewUsers()

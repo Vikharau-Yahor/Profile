@@ -40,7 +40,10 @@ namespace Profile.DAL.Entities
             {
                 User = user,
                 Specialization = specialization,
-                TraineeProfile = new TraineeProfile()
+                TraineeProfile = new TraineeProfile
+                {
+                    TraineeId = user.Id,
+                }
             };
         }
     }

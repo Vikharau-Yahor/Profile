@@ -26,7 +26,7 @@ namespace Profile.UI
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             
-            //Database.SetInitializer(new DropCreateSeedDatabaseAlways());
+            Database.SetInitializer(new DropCreateSeedDatabaseAlways());
 
             ValueProviderFactories.Factories.Remove(ValueProviderFactories.Factories.OfType<JsonValueProviderFactory>().First());
             ValueProviderFactories.Factories.Add(new JsonNetValueProviderFactory());

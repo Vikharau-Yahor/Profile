@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Profile.BL.Interfaces;
 using Profile.DAL.Entities;
@@ -79,10 +80,9 @@ namespace Profile.UI.Controllers
         public ActionResult DeleteUsers(NewUsersForRemovingJsonModel usersJson)
         {
             var usersIds = usersJson.UserIds;
+            _userProvider.DeleteNewUsers(usersIds);
 
-            //// Place here method for removing users
-
-            return Content("Success");
+            return new EmptyResult();
         }
 
         public ActionResult ManageProjects()

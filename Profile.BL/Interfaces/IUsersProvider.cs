@@ -12,6 +12,7 @@ namespace Profile.BL.Interfaces
         Task<User> GetUserByEmailAsync(string email);
         User GetUser(string login);
         List<User> GetNewUsers();
+        void DeleteNewUsers(int[] userIds);
         void SetRoles(int[] userIds, List<RoleType> roles, int? specializationId = null);
         Task<ClaimsIdentity> AuthenticateAsync(string login, string password);
         Task SendRecoverMailToUser(int userId, string callbackUrl);
