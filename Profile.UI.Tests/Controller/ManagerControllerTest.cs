@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ninject;
-using Profile.BL.Infrastructure;
 using Profile.BL.Interfaces;
-using Profile.BL.Providers;
 using Profile.DAL.Context;
 using Profile.DAL.Entities;
 using Profile.UI.Controllers;
-using Profile.UI.Mappers;
 using Profile.UI.ModelEnums;
 using Profile.UI.Models.Manager;
-using Profile.UI.Tests.Ninject;
 
 namespace Profile.UI.Tests.Controller
 {
@@ -382,12 +377,17 @@ namespace Profile.UI.Tests.Controller
             };
 
             // Act
-            var result = _controller.DeleteUsers(fakeJson) as ContentResult;
-
+            try
+            {
+                var result = _controller.DeleteUsers(fakeJson) as EmptyResult;
+            }
+            catch(Exception error)
+            {
+                Assert.Fail(error.Message);
+            }
             // Expected
             var areUsersDeleted = !_context.Users.Any(u => fakeJson.UserIds.Contains(u.Id));
 
-            Assert.AreEqual(OperationInfo.SuccessMessage, result.Content, result.Content);
             Assert.IsTrue(areUsersDeleted, "Not all users removed from database");
         }
 

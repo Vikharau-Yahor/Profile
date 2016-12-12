@@ -8,12 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using log4net;
 using Microsoft.AspNet.Identity;
-using Profile.BL.Infrastructure;
 using Profile.BL.Interfaces;
 using Profile.DAL.Context;
 using Profile.DAL.Entities;
 using Profile.DAL.Identity;
-using Profile.DAL.Identity.Entities;
 
 namespace Profile.BL.Providers
 {
@@ -190,29 +188,35 @@ namespace Profile.BL.Providers
             return DefaultAvatarUrl;
         }
 
-        public OperationInfo DeleteNewUsers(int[] userIds)
+        public void DeleteNewUsers(int[] userIds)
         {
-            var users = _context.Users.Where(u => userIds.Contains(u.Id)).ToList();
-
-            if (users.Any(u => u.Roles.Count != 0))
+            Logger.Debug("Execute DeleteNewUsers method");
+            try
             {
-                return new OperationInfo(OperationInfo.Failure,
-                                         "Could not execute delete operation. Target users can not have roles");
-            }
+                var users = _context.Users.Where(u => userIds.Contains(u.Id)).ToList();
 
-            foreach (var user in users)
-            {
-                _context.Entry(user).State = EntityState.Deleted;
-
-                if (user.Contacts != null)
+                if (users.Any(u => u.Roles.Count != 0))
                 {
-                    _context.Entry(user.Contacts).State = EntityState.Deleted;
+                    throw new Exception("Operation failed. Target users can not have roles");
                 }
+
+                foreach (var user in users)
+                {
+                    _context.Entry(user).State = EntityState.Deleted;
+
+                    if (user.Contacts != null)
+                    {
+                        _context.Entry(user.Contacts).State = EntityState.Deleted;
+                    }
+                }
+
+                _context.SaveChanges();
             }
-
-            _context.SaveChanges();
-
-            return OperationInfo.GetSuccessOperation();
+            catch(Exception e)
+            {
+                Logger.Debug(e.Message);
+                throw e;
+            }
         }
 
         public List<User> GetNewUsers()

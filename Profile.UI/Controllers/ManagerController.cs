@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using Profile.BL.Infrastructure;
 using Profile.BL.Interfaces;
 using Profile.DAL.Entities;
 using Profile.UI.Filters;
@@ -81,17 +80,9 @@ namespace Profile.UI.Controllers
         public ActionResult DeleteUsers(NewUsersForRemovingJsonModel usersJson)
         {
             var usersIds = usersJson.UserIds;
-            OperationInfo operationInfo;
-            try
-            {
-                operationInfo = _userProvider.DeleteNewUsers(usersIds);
-            }
-            catch (Exception error)
-            {
-                return Content($"Server error: {error.Message}");
-            }
+            _userProvider.DeleteNewUsers(usersIds);
 
-            return Content(operationInfo.Message);
+            return new EmptyResult();
         }
 
         public ActionResult ManageProjects()
