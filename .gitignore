@@ -1,0 +1,12 @@
+.vs/
+packages/
+*.dll
+*.pdb
+obj/
+bin/
+*.user
+.idea/
+logs/
+/UI_Source/node_modules/*
+
+StyleCop.Cache
