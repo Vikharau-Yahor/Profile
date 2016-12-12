@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Profile.BL.Infrastructure;
 using Profile.DAL.Entities;
 
 namespace Profile.BL.Interfaces
@@ -12,6 +13,7 @@ namespace Profile.BL.Interfaces
         Task<User> GetUserByEmailAsync(string email);
         User GetUser(string login);
         List<User> GetNewUsers();
+        OperationInfo DeleteNewUsers(int[] userIds);
         void SetRoles(int[] userIds, List<RoleType> roles, int? specializationId = null);
         Task<ClaimsIdentity> AuthenticateAsync(string login, string password);
         Task SendRecoverMailToUser(int userId, string callbackUrl);

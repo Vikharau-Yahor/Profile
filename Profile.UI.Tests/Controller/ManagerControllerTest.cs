@@ -5,6 +5,7 @@ using System.Transactions;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ninject;
+using Profile.BL.Infrastructure;
 using Profile.BL.Interfaces;
 using Profile.BL.Providers;
 using Profile.DAL.Context;
@@ -386,6 +387,7 @@ namespace Profile.UI.Tests.Controller
             // Expected
             var areUsersDeleted = !_context.Users.Any(u => fakeJson.UserIds.Contains(u.Id));
 
+            Assert.AreEqual(OperationInfo.SuccessMessage, result.Content, result.Content);
             Assert.IsTrue(areUsersDeleted, "Not all users removed from database");
         }
 

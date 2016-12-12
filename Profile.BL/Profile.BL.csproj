@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\OperationInfo.cs" />
     <Compile Include="Interfaces\ICourseProvider.cs" />
     <Compile Include="Interfaces\IGroupProvider.cs" />
     <Compile Include="Interfaces\ILanguageProvider.cs" />
