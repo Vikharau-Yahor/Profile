@@ -190,7 +190,6 @@ namespace Profile.BL.Providers
 
         public void DeleteNewUsers(int[] userIds)
         {
-
             var users = _context.Users.Where(u => userIds.Contains(u.Id)).ToList();
 
             if (users.Any(u => u.Roles.Count != 0))
